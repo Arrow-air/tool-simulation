@@ -1,0 +1,29 @@
+services:
+  cargo:
+    image: ghcr.io/arrow-air/svc-cargo/svc-cargo-server
+    ports:
+      - "8000:8000"
+  
+  scheduler:
+    image: ghcr.io/arrow-air/svc-scheduler/svc-scheduler-server
+    ports:
+      - "8001:8000"
+  
+  pricing:
+    image: ghcr.io/arrow-air/svc-scheduler/svc-pricing-server
+    ports:
+      - "8002:8000"
+  
+  storage:
+    image: ghcr.io/arrow-air/svc-scheduler/svc-storage-server
+    ports:
+      - "8003:8000"
+    # volumes:
+    #   - demo_1_volume:/var/demo_1_volume
+    #  TODO Depend on postgresql container
+
+# postgresql:
+#  TODO populate with assets/
+
+volumes:
+  demo_1_volume: {}

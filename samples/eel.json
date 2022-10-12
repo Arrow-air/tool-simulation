@@ -1,0 +1,20 @@
+{
+    "events": [
+        {
+            "event":{
+                "CustomerEvent":{
+                    "CargoRequest":{
+                        "CargoCreate":{
+                            "vport_depart_id":"",
+                            "vport_arrive_id":"",
+                            "timestamp_depart_min":"2022-01-01T12:12:12",
+                            "timestamp_depart_max":"2022-01-01T12:12:12",
+                            "weight_kg": 10.0
+                        }
+                    }
+                }
+            },
+            "timestamp":"2022-01-01T12:12:12"
+        }
+    ]
+}
