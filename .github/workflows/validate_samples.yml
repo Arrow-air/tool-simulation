@@ -1,0 +1,26 @@
+name: Validate Samples
+
+env:
+  TERM: xterm
+  SAMPLES_DIR: ./samples/
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  cfg-files:
+    name: Configuration Files are Valid
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: find $SAMPLES_DIR -iname '*.y*ml' | xargs -I{} sh -c "cargo run -q -p validate_config -- {}"
+
+  eel-files:
+    name: EEL Files are Valid
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: find $SAMPLES_DIR -iname '*.json' | xargs -I{} sh -c "cargo run -q -p validate_eel -- {}"

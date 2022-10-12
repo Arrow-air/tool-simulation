@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "tools/gen_eel",
+    "tools/validate_config",
+    "tools/validate_eel",
+    "sim"
+]
