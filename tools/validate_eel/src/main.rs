@@ -1,10 +1,6 @@
 //! Validate EEL Files
 
-mod eel_types {
-    include!("../../../sim/src/eel_types.rs");
-}
-
-use eel_types::*;
+use sim_types::eel_types::*;
 
 /// Validate a file given as a command line argument
 fn main() -> Result<(), ()> {

@@ -1,9 +1,7 @@
 //! Validate Configuration Files
 //! Test
 
-mod cfg_types {
-    include!("../../../sim/src/cfg_types.rs");
-}
+use sim_types::cfg_types;
 
 /// Validate a file given as a command line argument
 fn main() -> Result<(), ()> {

@@ -1,12 +1,6 @@
 //! Generate an EEL File from a Configuration File
 
-mod cfg_types {
-    include!("../../../sim/src/cfg_types.rs");
-}
-
-mod eel_types {
-    include!("../../../sim/src/eel_types.rs");
-}
+// use sim_types::eel_types;
 
 // fn test() {
 //     let d = NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 12, 12);

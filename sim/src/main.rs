@@ -1,12 +1,9 @@
 //! Simulation Tool
 
-mod cfg_types;
-mod eel_types;
-
-use cfg_types::*;
-use eel_types::*;
 use clap::Parser;
 use chrono::{Duration, Utc};
+use sim_types::cfg_types::Config;
+use sim_types::eel_types::Eel;
 
 #[derive(Debug, clap::ValueEnum, Clone)]
 enum Filetype {

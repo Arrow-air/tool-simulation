@@ -20,6 +20,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
+ "sim_types",
  "svc-cargo-client-rest",
 ]
 
@@ -181,11 +182,7 @@ dependencies = [
 name = "gen_eel"
 version = "0.1.0"
 dependencies = [
- "chrono",
- "json",
- "serde",
- "serde_yaml",
- "svc-cargo-client-rest",
+ "sim_types",
 ]
 
 [[package]]
@@ -258,12 +255,6 @@ checksum = "49409df3e3bf0856b916e2ceaca09ee28e6871cf7d9ce97a692cacfdb2a25a47"
 dependencies = [
  "wasm-bindgen",
 ]
-
-[[package]]
-name = "json"
-version = "0.12.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "078e285eafdfb6c4b434e0d31e8cfcb5115b651496faca5749b88fafd4f23bfd"
 
 [[package]]
 name = "libc"
@@ -419,6 +410,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "sim_types"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "svc-cargo-client-rest",
+]
+
+[[package]]
 name = "strsim"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -512,20 +514,14 @@ dependencies = [
 name = "validate_config"
 version = "0.1.0"
 dependencies = [
- "chrono",
- "serde",
- "serde_yaml",
+ "sim_types",
 ]
 
 [[package]]
 name = "validate_eel"
 version = "0.1.0"
 dependencies = [
- "chrono",
- "serde",
- "serde_json",
- "serde_yaml",
- "svc-cargo-client-rest",
+ "sim_types",
 ]
 
 [[package]]

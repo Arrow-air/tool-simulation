@@ -6,8 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-json = "0.12.4"
-serde_yaml = "0.9.13"
-serde = { version="1.0.145", features=["derive"] }
-chrono = { version="0.4.22", features=["serde"] }
-svc-cargo-client-rest = { git="https://github.com/Arrow-air/svc-cargo.git" }
+sim_types = { path = "../../types" }

@@ -2,13 +2,13 @@
 
 Simulated agents to load test the Arrow Services
 
-## How it Works
+## :wrench: How it Works
 
 A "Docker Compose" file is used to spin up the microservices needed for the simulation.
 
 A local script contacts the REST layer of the services (`svc-cargo`, `svc-rideshare`, `svc-charter`, etc.) and executes a series of requests. The script follows an EEL (External Event Log) or pseudo-randomly generates events according to a configuration file.
 
-### Launch the Microservices
+### :rocket: Launch the Microservices
 
 :construction:
 
@@ -25,7 +25,7 @@ We would like to run simulations where the Arrow backend uses a local database i
     - During a simulation run, a PostgreSQL table will be populated for use with svc-storage.
     - The `docker-compose.yml` will launch a PostgreSQL Docker container that `svc-storage` relies on.
 
-### Launch a Simulation from an EEL File
+### :scroll: Launch a Simulation from an EEL File
 
 EEL files are logs of events with details and timestamps.
 
@@ -62,7 +62,7 @@ To run the simulation tool:
 make run -p sim -- --filename demo-1.json eel
 ```
 
-### Launch a Simulation from a Configuration File
+### :space_invader: Launch a Simulation from a Configuration File
 
 A configuration has rules governing the creation of agents and events.
 
@@ -70,7 +70,7 @@ A configuration has rules governing the creation of agents and events.
 make run -p sim -- --filename config.yaml cfg
 ```
 
-Example configuration:
+Basic configuration:
 ```yaml
 # Assets
 duration_s: 10
@@ -78,6 +78,10 @@ timestamp_start: "2022-01-03T12:00:11.002"
 ```
 
 Use `validate_config` to confirm that a configuration file is properly formed.
+
+```bash
+cargo run -p validate_config -- samples/cfg.yaml
+```
 
 ### Generate an EEL File from a Configuration File
 

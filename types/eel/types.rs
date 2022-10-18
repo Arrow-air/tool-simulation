@@ -1,10 +1,9 @@
-// use serde_yaml; // 0.8.23
+mod customer_events;
+use customer_events::*;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::io::{Error, ErrorKind};
-
-pub use svc_cargo_client_rest::types as cargo_client_types;
 
 ///////////////////////////////////////////////////////////////////////
 /// EEL File
@@ -17,6 +16,7 @@ pub enum EelType {
     // AuthorityEvent
 }
 
+/// External Event
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EelEvent {
     /// The type of event
@@ -26,33 +26,12 @@ pub struct EelEvent {
     pub timestamp: NaiveDateTime,
 }
 
+/// External Event Log
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Eel {
+
+    /// A list of external events
     pub events: Vec<EelEvent>,
-}
-
-///////////////////////////////////////////////////////////////////////
-/// CustomerRequest Events
-///////////////////////////////////////////////////////////////////////
-#[derive(Debug, Serialize, Deserialize)]
-pub enum CustomerRequest {
-    /// Request for a new cargo flight
-    CargoRequest(CargoRequest),
-    // Rideshare(RideshareRequest),
-    // Charter(CharterRequest),
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum CargoRequest {
-    /// Create a cargo flight
-    CargoCreate(cargo_client_types::FlightQuery),
-
-    /// Confirm a cargo flight
-    CargoConfirm(cargo_client_types::FlightConfirm),
-
-    /// Cancel a cargo flight
-    CargoCancel(cargo_client_types::FlightCancel),
-    // Modify(cargo_client_types::ModifyQuery) // R2
 }
 
 impl Eel {

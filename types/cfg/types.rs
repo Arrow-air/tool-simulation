@@ -1,19 +1,15 @@
-// Types used for Configuration Files
-//
-
-// use serde_yaml; // 0.8.23
 use chrono::{NaiveDate, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::io::{Error, ErrorKind};
 
 /// Configuration File Fields
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Copy, Clone)]
 pub struct Config {
-    // Date and Time for the Simulation to Start
+    /// Date and Time for the Simulation to Start
     pub timestamp_start: NaiveDateTime,
 
-    // Duration of simulation
+    /// Duration of simulation
     pub duration_s: u32,
 }
 
