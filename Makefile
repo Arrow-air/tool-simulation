@@ -3,9 +3,9 @@
 # File origin: https://github.com/Arrow-air/tf-github/tree/main/src/templates/rust-all/Makefile.tftpl
 
 DOCKER_NAME          := arrow-tool-simulation
-PACKAGE_NAME         := $(name)
+PACKAGE_NAME         := tool-simulation
 
-PUBLISH_PACKAGE_NAME := $(name)-client-grpc
+PUBLISH_PACKAGE_NAME := tool-simulation-client-grpc
 DOCKER_PORT_REST     := 8000
 DOCKER_PORT_GRPC     := 50051
 HOST_PORT_REST       := 3000
