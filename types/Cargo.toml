@@ -1,0 +1,17 @@
+[package]
+edition = "2021"
+name    = "sim_types"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+chrono                = { version = "0.4.22", features = ["serde"] }
+serde                 = { version = "1.0.145", features = ["derive"] }
+serde_json            = "1.0.86"
+serde_yaml            = "0.9.13"
+svc-cargo-client-rest = { git = "https://github.com/Arrow-air/svc-cargo.git", branch = "develop" }
+
+[lib]
+name = "sim_types"
+path = "lib.rs"
