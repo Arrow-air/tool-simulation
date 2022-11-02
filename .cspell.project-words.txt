@@ -4,3 +4,4 @@ vertiport
 Lilium
 chrono
 serde
+RUSTC
