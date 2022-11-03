@@ -9,7 +9,7 @@ pub struct Config {
     /// Date and Time for the Simulation to Start
     pub timestamp_start: NaiveDateTime,
 
-    /// Duration of simulation
+    /// Duration of simulation (seconds)
     pub duration_s: u32,
 }
 
