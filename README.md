@@ -58,13 +58,13 @@ This is helpful to test specific edge cases, or re-run previous days' real-world
 
 To run the simulation tool:
 ```bash
-make run -p tool-simulation -- -i demo-1.json
+make -f sim.mk run-sim FILE=samples/eel.json
 ```
 
 Use `validate_eel` to confirm that an EEL file is properly formed.
 
 ```bash
-cargo run -p validate_eel -- samples/eel.json
+make -f sim.mk validate-eel FILE=samples/eel.json
 ```
 
 ### :space_invader: Launch a Simulation from a Configuration File
@@ -72,7 +72,7 @@ cargo run -p validate_eel -- samples/eel.json
 A configuration has rules governing the creation of agents and events.
 
 ```bash
-make run -p tool-simulation -- -i config.yaml
+make -f sim.mk run-sim FILE=samples/config.yaml
 ```
 
 Basic configuration:
@@ -85,5 +85,5 @@ timestamp_start: "2022-01-03T12:00:11.002"
 Use `validate_config` to confirm that a configuration file is properly formed.
 
 ```bash
-cargo run -p validate_config -- samples/cfg.yaml
+make -f sim.mk validate-cfg FILE=samples/cfg.yaml 
 ```

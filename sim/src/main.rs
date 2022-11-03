@@ -17,9 +17,9 @@ struct Args {
 }
 
 async fn action(event: &EelEventType) -> Result<Response<Body>, Error> {
+    // Will add Weather and Civil Authority Events
     match event {
-        EelEventType::CustomerEvent(s) => customer::action(s).await, // EelEventType::WeatherEvent(s) => { weather_action (s) }
-                                                                    // EelEventType::AuthorityEvent(s) => { authority_action (s) }
+        EelEventType::CustomerEvent(s) => customer::action(s).await,
     }
 }
 

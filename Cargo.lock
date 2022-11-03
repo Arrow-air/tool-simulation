@@ -898,6 +898,7 @@ dependencies = [
 name = "validate_config"
 version = "0.1.0"
 dependencies = [
+ "clap",
  "sim_types",
 ]
 
@@ -905,6 +906,7 @@ dependencies = [
 name = "validate_eel"
 version = "0.1.0"
 dependencies = [
+ "clap",
  "sim_types",
 ]
 
