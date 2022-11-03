@@ -1,18 +1,22 @@
 //! Validate EEL Files
-
+use clap::Parser;
 use sim_types::eel_types::*;
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// Number of times to greet
+    #[arg(short, long)]
+    input: String,
+}
 
 /// Validate a file given as a command line argument
 fn main() -> Result<(), ()> {
     // Get Fields in Provided File
-    let args: Vec<String> = std::env::args().collect();
-    if args.len() < 2 {
-        eprintln!("Please provide an EEL filename as a command line argument.");
-        return Err(());
-    }
+    let args = Args::parse();
 
-    print!("{}: ", &args[1]);
-    match Eel::from_filename(&args[1]) {
+    let fname = args.input;
+    match Eel::from_filename(&fname) {
         Ok(_) => {
             println!("\u{1F370} Valid EEL File");
             Ok(())
