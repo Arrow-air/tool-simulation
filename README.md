@@ -58,7 +58,7 @@ This is helpful to test specific edge cases, or re-run previous days' real-world
 
 To run the simulation tool:
 ```bash
-make run -p sim -- -i demo-1.json
+make run -p tool-simulation -- -i demo-1.json
 ```
 
 Use `validate_eel` to confirm that an EEL file is properly formed.
@@ -72,7 +72,7 @@ cargo run -p validate_eel -- samples/eel.json
 A configuration has rules governing the creation of agents and events.
 
 ```bash
-make run -p sim -- -i config.yaml
+make run -p tool-simulation -- -i config.yaml
 ```
 
 Basic configuration:
