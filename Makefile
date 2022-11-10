@@ -9,7 +9,7 @@ PUBLISH_PACKAGE_NAME := tool-simulation-client-grpc
 DOCKER_PORT_REST     := 8000
 DOCKER_PORT_GRPC     := 50051
 HOST_PORT_REST       := 3000
-HOST_PORT_GRPC       :=
+HOST_PORT_GRPC       := 
 
 help: .help-base .help-rust .help-python .help-cspell .help-markdown .help-editorconfig .help-commitlint .help-toml .help-docker
 build: rust-build docker-build
