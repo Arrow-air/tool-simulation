@@ -72,7 +72,7 @@ make -f sim.mk validate-eel FILE=samples/eel.json
 A configuration has rules governing the creation of agents and events.
 
 ```bash
-make -f sim.mk run-sim FILE=samples/config.yaml
+make -f sim.mk run-sim FILE=samples/cfg.yaml
 ```
 
 Basic configuration:
