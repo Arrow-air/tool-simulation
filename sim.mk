@@ -12,6 +12,7 @@ sim_base = docker run \
 		--rm \
 		--user `id -u`:`id -g` \
 		--workdir=/usr/src/app \
+		--network host \
 		-v "$(PWD)/:/usr/src/app" \
 		-v "$(PWD)/.cargo/registry:/usr/local/cargo/registry" \
 		-e CARGO_INCREMENTAL=$(CARGO_INCREMENTAL) \

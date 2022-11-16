@@ -1,4 +1,8 @@
-mod customer_events;
+/// Eel files include customer events
+pub mod customer_events {
+    include!("../events/customer_events.rs");
+}
+
 pub use customer_events::*;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
