@@ -1,13 +1,14 @@
 //! Simulation Tool
 
-use chrono::{Duration, Utc};
+use chrono::{Duration, NaiveDateTime, Utc};
 use clap::Parser;
-use hyper::{Body, Error, Response};
-use sim_types::cfg_types::Config;
-use sim_types::eel_types::{Eel, EelEventType};
-mod customer;
+use hyper::{Body, Response};
+use rand::seq::SliceRandom;
+use sim_types::cfg_types::{customer_agent::Customer, Config};
+use sim_types::eel_types::{customer_events, Eel, EelEventType};
 
-/// Simple program to greet a person
+pub use svc_storage_client_grpc::client::{vertiport_rpc_client::VertiportRpcClient, SearchFilter};
+
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
@@ -16,27 +17,47 @@ struct Args {
     input: String,
 }
 
-async fn action(event: &EelEventType) -> Result<Response<Body>, Error> {
+async fn action(event: &EelEventType) -> Result<Response<Body>, ()> {
     // Will add Weather and Civil Authority Events
     match event {
-        EelEventType::CustomerEvent(s) => customer::action(s).await,
+        EelEventType::CustomerEvent(s) => customer_events::action(s).await,
     }
 }
 
 async fn config_route(config: Config) -> Result<(), ()> {
     println!("Detected config file.");
 
-    let sim_start_time = config.timestamp_start;
+    // Initialize
+    let sim_start_time: NaiveDateTime = config.timestamp_start;
     let sim_end_time = sim_start_time + Duration::seconds(config.duration_s.into());
     let real_time_start = Utc::now();
 
+    // Initialize Customers
+    let n_customers = config.n_customers;
+    let mut customers: Vec<Customer> = vec![];
+    for _ in 0..n_customers {
+        let customer_type = config.customer_types.choose(&mut rand::thread_rng());
+        if customer_type.is_none() {
+            eprintln!("ERROR: Could not choose a customer type.");
+            return Err(());
+        }
+
+        let c = Customer::generate(customer_type.unwrap(), sim_start_time);
+
+        customers.push(c);
+    }
+
+    println!("Starting simulation.");
     loop {
         let real_elapsed_time = Utc::now() - real_time_start;
 
-        // TODO Implement actions
-
         if sim_start_time + real_elapsed_time >= sim_end_time {
             break;
+        }
+
+        // TODO Time Delays and Kickoff Times
+        for x in &mut customers {
+            x.next().await;
         }
     }
 
@@ -52,7 +73,7 @@ async fn eel_route(eel: Eel) -> Result<(), ()> {
 
     let sim_time_start = eel.events[0].timestamp;
     let real_time_start = Utc::now();
-    println!("Sim Time Start: {:?}", sim_time_start);
+    println!("Sim Time Start: {:?}\n", sim_time_start);
 
     // Start from first event
     let mut event_iter = eel.events.iter();
@@ -69,9 +90,13 @@ async fn eel_route(eel: Eel) -> Result<(), ()> {
                     continue;
                 }
 
-                println!("{}: {:?}", e.timestamp, e.event);
+                println!(
+                    "EVENT @ {}\n{}",
+                    e.timestamp,
+                    serde_json::to_string_pretty(&e.event).unwrap()
+                );
                 let result = action(&e.event).await;
-                println!("{:?}", result);
+                println!("RESPONSE\n{:?}\n", result);
                 next = event_iter.next();
             }
         }
@@ -94,14 +119,12 @@ async fn main() -> Result<(), ()> {
     let args = Args::parse();
 
     let fname = args.input;
-    match Eel::from_filename(&fname) {
-        Ok(eel) => eel_route(eel).await,
-        Err(_) => match Config::from_filename(&fname) {
-            Ok(config) => config_route(config).await,
-            Err(_) => {
-                eprintln!("Could not parse input as an EEL or Config file.");
-                Err(())
-            }
-        },
+    if let Ok(eel) = Eel::from_filename(&fname) {
+        eel_route(eel).await
+    } else if let Ok(config) = Config::from_filename(&fname) {
+        config_route(config).await
+    } else {
+        eprintln!("Could not parse input as an EEL or Config file.");
+        Err(())
     }
 }
