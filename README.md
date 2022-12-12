@@ -9,20 +9,19 @@ A local script contacts the REST layer of the services (`svc-cargo`, `svc-ridesh
 
 ### :rocket: Launch the Microservices
 
-:construction:
+See the [tools/local-dev/README.md](https://github.com/Arrow-air/tools/blob/main/local-dev/README.md) file for instructions on using a `docker-compose.yml` file to launch the microservices.
 
-Want to launch the microservices locally through a docker-compose.yml file.
+If testing local branches of a microservice (e.g. `svc-cargo`), build the docker container for that service (`make docker-build`) and make the following edits to the `.env` file used in tandem with `docker compose`:
 
-:exclamation: A single host running all microservices may experience memory and CPU cap issues. In progress.
-
-We would like to run simulations where the Arrow backend uses a local database instead of real-world assets.
-
-1) `svc-storage` needs an argument to point to a local database
-    - This argument should be provided in the `docker-compose.yml`
-2) A local CSV file can populate a new PostgreSQL table
-    - A CSV file will be checked into the GitHub, e.g. `demo_1_assets.csv`
-    - During a simulation run, a PostgreSQL table will be populated for use with svc-storage.
-    - The `docker-compose.yml` will launch a PostgreSQL Docker container that `svc-storage` relies on.
+```dotenv
+# -----------------------------------------------------------
+# svc-cargo
+# -----------------------------------------------------------
+CARGO_IMAGE=svc-cargo # instead of ghcr.io/etc...
+CARGO_TAG=latest # instead of develop
+CARGO_PORT_GRPC=50000
+CARGO_PORT_REST=8000
+```
 
 ### :scroll: Launch a Simulation from an EEL File
 
@@ -36,7 +35,7 @@ Example EEL file:
             "event":{
                 "CustomerEvent":{
                     "CargoRequest":{
-                        "CargoCreate":{
+                        "Create":{
                             "vertiport_depart_id":"vertiport-1",
                             "vertiport_arrive_id":"vertiport-2",
                             "timestamp_depart_min":"2022-01-01T12:12:12",
@@ -80,6 +79,11 @@ Basic configuration:
 # Assets
 duration_s: 10
 timestamp_start: "2022-01-03T12:00:11.002"
+n_customers: 1
+customer_types:
+- greedy # Will not cancel, will pick up first available flight
+- mistake # Will book a flight and then attempt to cancel
+- indecisive # Will query flights but never pick anything
 ```
 
 Use `validate_config` to confirm that a configuration file is properly formed.

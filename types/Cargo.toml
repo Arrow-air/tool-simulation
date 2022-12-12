@@ -7,10 +7,14 @@ version = "0.1.0"
 
 [dependencies]
 chrono                = { version = "0.4.22", features = ["serde"] }
+hyper                 = { version = "0.14", features = ["full"] }
+prost-types           = "0.11.2"
+rand                  = "0.8.5"
 serde                 = { version = "1.0.145", features = ["derive"] }
 serde_json            = "1.0.86"
 serde_yaml            = "0.9.13"
-svc-cargo-client-rest = { git = "https://github.com/Arrow-air/svc-cargo.git", branch = "develop" }
+svc-cargo-client-rest = { git = "https://github.com/Arrow-air/svc-cargo" }
+uuid                  = { version = "1.2", features = ["v4"] }
 
 [lib]
 name = "sim_types"

@@ -4,33 +4,17 @@
             "event":{
                 "CustomerEvent":{
                     "CargoRequest":{
-                        "CargoCreate":{
+                        "Query":{
                             "vertiport_depart_id":"",
                             "vertiport_arrive_id":"",
-                            "timestamp_depart_min":"2022-01-01T12:12:12",
-                            "timestamp_depart_max":"2022-01-01T12:12:12",
+                            "timestamp_depart_min": {"secs_since_epoch": 1668604571, "nanos_since_epoch": 0},
+                            "timestamp_depart_max": {"secs_since_epoch": 1668604900, "nanos_since_epoch": 0},
                             "cargo_weight_kg": 10.0
                         }
                     }
                 }
             },
             "timestamp":"2022-01-01T12:12:00"
-        },
-        {
-            "event":{
-                "CustomerEvent":{
-                    "CargoRequest":{
-                        "CargoCreate":{
-                            "vertiport_depart_id":"",
-                            "vertiport_arrive_id":"",
-                            "timestamp_depart_min":"2022-01-01T12:12:12",
-                            "timestamp_depart_max":"2022-01-01T12:12:12",
-                            "cargo_weight_kg": 10.0
-                        }
-                    }
-                }
-            },
-            "timestamp":"2022-01-01T12:12:05"
         }
     ]
 }

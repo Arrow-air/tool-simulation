@@ -9,3 +9,8 @@ pub mod eel_types {
 pub mod cfg_types {
     include!("cfg/types.rs");
 }
+
+/// Types used for events
+pub mod event_types {
+    include!("events/types.rs");
+}
