@@ -1,0 +1,5 @@
+timestamp_start: "2024-12-03T16:00:11.002"
+duration_s: 5
+n_customers: 1
+customer_types:
+- mistake
