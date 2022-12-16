@@ -37,14 +37,18 @@ async fn config_route(config: Config) -> Result<(), ()> {
     let mut customers: Vec<Customer> = vec![];
     for _ in 0..n_customers {
         let customer_type = config.customer_types.choose(&mut rand::thread_rng());
-        if customer_type.is_none() {
-            eprintln!("ERROR: Could not choose a customer type.");
-            return Err(());
+
+        match customer_type {
+            None => {
+                eprintln!("ERROR: Could not choose a customer type.");
+                return Err(());
+            }
+            Some(ct) => {
+                if let Ok(c) = Customer::generate(ct, sim_start_time) {
+                    customers.push(c);
+                }
+            }
         }
-
-        let c = Customer::generate(customer_type.unwrap(), sim_start_time);
-
-        customers.push(c);
     }
 
     println!("Starting simulation.");
@@ -90,11 +94,9 @@ async fn eel_route(eel: Eel) -> Result<(), ()> {
                     continue;
                 }
 
-                println!(
-                    "EVENT @ {}\n{}",
-                    e.timestamp,
-                    serde_json::to_string_pretty(&e.event).unwrap()
-                );
+                let err_str: String = serde_json::to_string_pretty(&e.event)
+                    .unwrap_or_else(|_| "ERROR: Could not make pretty JSON string.".to_string());
+                println!("EVENT @ {}\n{}", e.timestamp, err_str);
                 let result = action(&e.event).await;
                 println!("RESPONSE\n{:?}\n", result);
                 next = event_iter.next();

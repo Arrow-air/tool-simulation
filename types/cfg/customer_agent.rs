@@ -67,11 +67,6 @@ pub struct Customer {
 /// How customers exhibit behaviors
 trait CustomerBehavior {
     /// How a customer responds to a list of available flights
-    /// # Arguments
-    /// * `flights` - A list of draft flight plans to choose from
-    ///
-    /// # Returns
-    /// A flight plan ID from the list
     fn confirm(&self, flights: &[FlightOption]) -> Option<String>;
 
     /// Willingness to wait N seconds
@@ -132,14 +127,10 @@ impl CustomerBehavior for IndecisiveCustomer {
 
 impl Customer {
     /// Creates a customer, assigns it a behavior and desired itinerary details
-    /// # Arguments
-    /// * customer_type - A string
-    /// * vertiport_depart_id - The UUID of the departure vertiport
-    /// * vertiport_arrive_id - The UUID of the arrival vertiport
     pub fn generate(
         customer_type: &str,
         current_time: chrono::NaiveDateTime
-    ) -> Self {
+    ) -> Result<Self, Box<dyn std::error::Error>> {
         let uuid = Uuid::new_v4();
         println!("Creating '{}' customer {}", customer_type, uuid);
         let customer: Box<dyn CustomerBehavior> = match customer_type {
@@ -153,23 +144,31 @@ impl Customer {
             }
         };
 
-        let time: SystemTime = SystemTime::try_from(
+        let time = SystemTime::try_from(
             prost_types::Timestamp {
                 seconds: current_time.timestamp(),
                 nanos: current_time.timestamp_subsec_nanos() as i32
             }
-        ).unwrap();
+        );
 
-        Customer {
-            id: uuid,
-            behavior: customer,
-            status: CustomerStatus::Vertiports,
-            vertiport_depart_id: "".to_string(),
-            vertiport_arrive_id: "".to_string(),
-            current_time: time,
-            fp_id: "".to_string(),
-            flights: vec!(),
-            retries: 1
+        match time {
+            Ok(t) => { 
+                Ok(Customer {
+                    id: uuid,
+                    behavior: customer,
+                    status: CustomerStatus::Vertiports,
+                    vertiport_depart_id: "".to_string(),
+                    vertiport_arrive_id: "".to_string(),
+                    current_time: t,
+                    fp_id: "".to_string(),
+                    flights: vec!(),
+                    retries: 1
+                })
+            },
+            Err(e) => {
+                eprintln!("ERROR: Could not parse timestamp.");
+                Err(Box::new(e))
+            }
         }
     }
 
@@ -190,20 +189,34 @@ impl Customer {
         );
 
         self.log("Attempting to query for vertiports...");
+
+        // Get response
         let act = customer_events::action(&query).await;
         if let Err(e) = act {
             self.log(&format!("Failed to get vertiports: {:?}", e));
             return false;
         }
-
-        let resp = act.unwrap();
+        let resp = act.unwrap(); // safe
         if resp.status() != StatusCode::OK {
             self.log(&format!("Bad Response: {}", resp.status()));
             return false;
         }
 
-        let bytes = body::to_bytes(resp.into_body()).await.unwrap();
-        let mut vertiports: Vec<Vertiport> = serde_json::from_slice(&bytes).unwrap();
+        // Get bytes
+        let bytes = body::to_bytes(resp.into_body()).await;
+        if bytes.is_err() {
+            self.log("Failed to convert response to bytes.");
+            return false;
+        }
+        let bytes = bytes.unwrap(); // safe
+
+        // Get vertiports from bytes
+        let res = serde_json::from_slice(&bytes);
+        if res.is_err() {
+            self.log("Failed to get vertiports from bytes.");
+            return false;
+        }
+        let mut vertiports: Vec<Vertiport> = res.unwrap(); // safe
         if vertiports.len() < 2 {
             self.log(&format!("Not enough vertiports available: {}.", vertiports.len()));
             return false;
@@ -247,22 +260,39 @@ impl Customer {
             self.log(&format!("Failed to query: {:?}", e));
             return false;
         }
-
-        let resp = act.unwrap();
+        let resp = act.unwrap(); // safe
         if resp.status() != StatusCode::OK {
             self.log(&format!("Bad Response: {}", resp.status()));
             return false;
         }
 
-        let bytes = body::to_bytes(resp.into_body()).await.unwrap();
-        self.flights = serde_json::from_slice(&bytes).unwrap();
+        // Get bytes
+        let bytes = body::to_bytes(resp.into_body()).await;
+        if bytes.is_err() {
+            self.log("Failed to convert response to bytes.");
+            return false;
+        }
+        let bytes = bytes.unwrap(); // safe
+
+        // Get Queries
+        let res = serde_json::from_slice(&bytes);
+        if res.is_err() {
+            self.log("Failed to get query from bytes");
+            return false;
+        }
+        self.flights = res.unwrap(); // safe
+
         if self.flights.is_empty() {
             self.log("No routes available.");
             return false;
         }
 
         for f in &self.flights {
-            self.log(&format!("Option: {} ({:?} USD)", f.fp_id, f.base_pricing.unwrap()));
+            let price: String = match f.base_pricing {
+                Some(p) => p.to_string(),
+                None => "UNK".to_string()
+            };
+            self.log(&format!("Option: {} ({:?} USD)", f.fp_id, price));
         }
 
         self.log(&format!("Received {} flight options.", self.flights.len()));
@@ -279,8 +309,7 @@ impl Customer {
             self.log("Did not select a flight.");
             return false;
         }
-
-        let draft_fp_id = ret.unwrap();
+        let draft_fp_id = ret.unwrap(); // safe
         
         let confirm_query = CustomerEvent::CargoRequest(
             CargoRequest::Confirm(
@@ -290,20 +319,33 @@ impl Customer {
         ));
 
         self.log(&format!("Confirming draft ID {}...", &draft_fp_id));
+
+        // Make request, get response
         let act = customer_events::action(&confirm_query).await;
         if act.is_err() {
             self.log("Failed to confirm.");
             return false;
         }
-
-        let resp = act.unwrap();
+        let resp = act.unwrap(); // safe
         if resp.status() != StatusCode::OK {
             self.log(&format!("Bad Response: {}", resp.status()));
             return false;
         }
 
-        let bytes = body::to_bytes(resp.into_body()).await.unwrap();
-        let fp_id = String::from_utf8(bytes.to_vec()).unwrap();
+        // Make bytes from response
+        let bytes = body::to_bytes(resp.into_body()).await;
+        if bytes.is_err() {
+            self.log("Failed to convert response into bytes.");
+        }
+        let bytes = bytes.unwrap(); // safe
+
+        // Make String from bytes
+        let fp_id = String::from_utf8(bytes.to_vec());
+        if fp_id.is_err() {
+            self.log("Failed to convert bytes to string.")
+        }
+        let fp_id = fp_id.unwrap(); //safe
+
         self.log(&format!("Confirmed, assigned plan {}.", fp_id));
         self.fp_id = fp_id;
         self.status = CustomerStatus::Cancel;
@@ -332,8 +374,8 @@ impl Customer {
             self.log(&format!("Could not cancel: {:?}", e));
             return false;
         }
+        let resp = act.unwrap(); // safe
 
-        let resp = act.unwrap();
         if resp.status() != StatusCode::OK {
             self.log(&format!("Bad Response: {}", resp.status()));
             return false;
@@ -341,8 +383,6 @@ impl Customer {
 
         self.log("Cancel success!");
 
-        // let bytes = body::to_bytes(resp.into_body()).await.unwrap();
-        // let id = String::from_utf8(bytes.to_vec()).unwrap();
         self.status = CustomerStatus::Done;
         true
     }

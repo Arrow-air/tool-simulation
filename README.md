@@ -1,6 +1,26 @@
-# tool-simulation
+![Arrow Banner](https://github.com/Arrow-air/.github/raw/main/profile/assets/arrow_v2_twitter-banner_neu.png)
 
-Simulated agents to load test the Arrow Services
+# `tool-simulation`
+
+![Rust
+Checks](https://github.com/arrow-air/tool-simulation/actions/workflows/rust_ci.yml/badge.svg?branch=main)
+![Python Flake8](https://github.com/arrow-air/tool-simulation/actions/workflows/python_ci.yml/badge.svg?branch=main)
+![Arrow DAO
+Discord](https://img.shields.io/discord/853833144037277726?style=plastic)
+
+
+## :telescope: Overview
+
+Simulated agents to load test the Arrow Services.
+
+Directory:
+- `sim/`: Implementation of simulation
+- `samples/`: Sample configuration and log files
+- `tools/`: Tools to validate config and log files
+- `types/events/`: Defines system events (passengers, weather, etc.)
+- `types/cfg/`: Config file types and agent behavior
+- `types/eel/`: Log file types
+- `sim.mk`: Makefile commands for simulation
 ## :wrench: How it Works
 
 A "Docker Compose" file is used to spin up the microservices needed for the simulation.
@@ -91,3 +111,9 @@ Use `validate_config` to confirm that a configuration file is properly formed.
 ```bash
 make -f sim.mk validate-cfg FILE=samples/cfg.yaml 
 ```
+
+## :busts_in_silhouette: Arrow DAO
+Learn more about us:
+- [Website](https://www.arrowair.com/)
+- [Arrow Docs](https://www.arrowair.com/docs/intro)
+- [Discord](https://discord.com/invite/arrow)

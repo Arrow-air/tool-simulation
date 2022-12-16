@@ -362,6 +362,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "geo-types"
+version = "0.7.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e26879b63ac36ca5492918dc16f8c1e604b0f70f884fffbd3533f89953ab1991"
+dependencies = [
+ "num-traits",
+]
+
+[[package]]
 name = "getrandom"
 version = "0.2.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -612,6 +621,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "num-derive"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "876a53fff98e03a936a674b29568b0e605f06b29372c2489ff4de23f1949743d"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "num-integer"
 version = "0.1.45"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -645,6 +665,15 @@ name = "once_cell"
 version = "1.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "86f0b0d4bf799edbc74508c1e8bf170ff5f41238e5f8225603ca7caaae2b7860"
+
+[[package]]
+name = "ordered-float"
+version = "3.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d84eb1409416d254e4a9c8fa56cc24701755025b458f0fcd8e59e1f5f40c23bf"
+dependencies = [
+ "num-traits",
+]
 
 [[package]]
 name = "os_str_bytes"
@@ -953,7 +982,7 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 [[package]]
 name = "svc-cargo-client-rest"
 version = "0.1.0"
-source = "git+https://github.com/Arrow-air/svc-cargo#89a18274632c2f62b52d4ae31a93838921dae0ab"
+source = "git+https://github.com/Arrow-air/svc-cargo?branch=main#b37453cb9dd2a9a73f780708b4e4b50b423933ed"
 dependencies = [
  "chrono",
  "serde",
@@ -963,9 +992,13 @@ dependencies = [
 
 [[package]]
 name = "svc-storage-client-grpc"
-version = "0.5.0-develop.1"
-source = "git+https://github.com/Arrow-air/svc-storage#d4030ea734d3249aeac0e0629b43ac85414611bc"
+version = "0.2.0"
+source = "git+https://github.com/Arrow-air/svc-storage?branch=main#b963ed9a43aa1dd1381697146b96ba9b9bb73ad9"
 dependencies = [
+ "geo-types",
+ "num-derive",
+ "num-traits",
+ "ordered-float",
  "prost",
  "prost-types",
  "tonic",
