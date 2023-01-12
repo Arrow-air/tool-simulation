@@ -1,7 +1,7 @@
 
 /// Configuration-driven simulations use agents
 pub mod customer_agent;
-use chrono::NaiveDateTime;
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::io::{Error, ErrorKind};
 
@@ -9,7 +9,7 @@ use std::io::{Error, ErrorKind};
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Config {
     /// Date and Time for the Simulation to Start
-    pub timestamp_start: NaiveDateTime,
+    pub timestamp_start: DateTime<Utc>,
 
     /// Duration of simulation (seconds)
     pub duration_s: u32,

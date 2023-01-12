@@ -13,7 +13,7 @@ rand                  = "0.8.5"
 serde                 = { version = "1.0.145", features = ["derive"] }
 serde_json            = "1.0.86"
 serde_yaml            = "0.9.13"
-svc-cargo-client-rest = { git = "https://github.com/Arrow-air/svc-cargo" }
+svc-cargo-client-rest = { git = "https://github.com/Arrow-air/svc-cargo", branch = "develop" }
 uuid                  = { version = "1.2", features = ["v4"] }
 
 [lib]

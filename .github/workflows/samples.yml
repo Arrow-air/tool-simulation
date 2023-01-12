@@ -1,0 +1,26 @@
+on:
+  schedule:
+    - cron: '0 4 * * *' # run at 4 AM UTC
+
+name: Confirm Samples Work
+
+env:
+  TERM: xterm
+
+jobs:
+  # Will catch broken dependencies
+  eel:
+    name: Validate EEL file
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test
+        run: make -f sim.mk validate-eel FILE=samples/eel.json
+
+  # Check if any URLs no longer work
+  cfg:
+    name: Run from a configuration file
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: make -f sim.mk validate-cfg FILE=samples/cfg.yaml

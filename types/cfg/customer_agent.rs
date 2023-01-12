@@ -1,5 +1,4 @@
-use std::time::Duration;
-use std::time::SystemTime;
+use chrono::{DateTime, Utc, Duration};
 use rand::seq::SliceRandom;
 use rand::Rng;
 use hyper::{StatusCode, body};
@@ -11,7 +10,8 @@ use svc_cargo_client_rest::types::{
     FlightOption,
     FlightConfirm,
     FlightCancel,
-    FlightQuery
+    FlightQuery,
+    TimeWindow
 };
 
 mod customer_events {
@@ -44,7 +44,7 @@ pub enum CustomerStatus {
 
 // #[derive(Default)]
 // pub struct CustomerStatistics {
-//     spawn_time: Option<SystemTime>,
+//     spawn_time: Option<DateTime<Utc>>,
 //     query_wait: Option<Duration>,
 //     confirm_wait: Option<Duration>,
 //     cancel_wait: Option<Duration>
@@ -58,7 +58,7 @@ pub struct Customer {
     status: CustomerStatus,
     vertiport_depart_id: String,
     vertiport_arrive_id: String,
-    current_time: SystemTime,
+    current_time: DateTime<Utc>,
     fp_id: String,
     flights: Vec<FlightOption>,
     retries: i8
@@ -138,7 +138,7 @@ impl Customer {
     /// * vertiport_arrive_id - The UUID of the arrival vertiport
     pub fn generate(
         customer_type: &str,
-        current_time: chrono::NaiveDateTime
+        current_time: DateTime<Utc>
     ) -> Self {
         let uuid = Uuid::new_v4();
         println!("Creating '{}' customer {}", customer_type, uuid);
@@ -153,20 +153,13 @@ impl Customer {
             }
         };
 
-        let time: SystemTime = SystemTime::try_from(
-            prost_types::Timestamp {
-                seconds: current_time.timestamp(),
-                nanos: current_time.timestamp_subsec_nanos() as i32
-            }
-        ).unwrap();
-
         Customer {
             id: uuid,
             behavior: customer,
             status: CustomerStatus::Vertiports,
             vertiport_depart_id: "".to_string(),
             vertiport_arrive_id: "".to_string(),
-            current_time: time,
+            current_time,
             fp_id: "".to_string(),
             flights: vec!(),
             retries: 1
@@ -232,10 +225,11 @@ impl Customer {
                 FlightQuery {
                     vertiport_depart_id: self.vertiport_depart_id.clone(),
                     vertiport_arrive_id: self.vertiport_arrive_id.clone(),
-                    timestamp_depart_min: None,
-                    timestamp_depart_max: None,
-                    timestamp_arrive_min: Some(self.current_time + Duration::from_secs(60)),
-                    timestamp_arrive_max: Some(self.current_time + Duration::from_secs(600)),
+                    time_depart_window: None,
+                    time_arrive_window: Some(TimeWindow {
+                        timestamp_min: self.current_time + Duration::seconds(60),
+                        timestamp_max: self.current_time + Duration::seconds(600),
+                    }),
                     cargo_weight_kg: 1.0,
                 }
             )

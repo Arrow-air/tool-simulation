@@ -1,6 +1,6 @@
 //! Simulation Tool
 
-use chrono::{Duration, NaiveDateTime, Utc};
+use chrono::{DateTime, Duration, Utc};
 use clap::Parser;
 use hyper::{Body, Response};
 use rand::seq::SliceRandom;
@@ -28,7 +28,7 @@ async fn config_route(config: Config) -> Result<(), ()> {
     println!("Detected config file.");
 
     // Initialize
-    let sim_start_time: NaiveDateTime = config.timestamp_start;
+    let sim_start_time: DateTime<Utc> = config.timestamp_start;
     let sim_end_time = sim_start_time + Duration::seconds(config.duration_s.into());
     let real_time_start = Utc::now();
 
