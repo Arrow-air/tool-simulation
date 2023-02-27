@@ -91,3 +91,25 @@ Use `validate_config` to confirm that a configuration file is properly formed.
 ```bash
 make -f sim.mk validate-cfg FILE=samples/cfg.yaml 
 ```
+
+## Load Balancing
+*Note: It is highly recommended that you set up a [virtual
+environment](https://docs.python.org/3/library/venv.html) under
+the `load-balancing` folder so that you don't install unnecessary
+packages on your local machine.*
+
+To test load balancing, run the following commands:
+
+```bash
+make prepare
+make start svc-<service-name>
+```
+
+Then go to the website printed on the console and start the simulation.
+
+For example, to test the load balancing of the `svc-cargo` service, run the following commands:
+
+```bash
+make prepare
+make start svc-cargo
+```
