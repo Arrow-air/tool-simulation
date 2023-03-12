@@ -1,6 +1,5 @@
 """This module spawns a locust test interface for svc-assets."""
 
-
 import uuid
 
 from locust import HttpUser, between, task
@@ -37,5 +36,4 @@ class Landlord(HttpUser):
     @task
     def query_vertiports(self):
         self.client.post(
-            "/cargo/vertiports", json={"latitude": 0, "longitude": 0}
-        )
+            "/cargo/vertiports", json={"latitude": 0, "longitude": 0})

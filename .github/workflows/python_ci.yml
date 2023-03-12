@@ -8,7 +8,7 @@ on:
       - develop
       - main
     paths:
-      - '**.py'
+      - "**.py"
 
 name: Python Checks
 

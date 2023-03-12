@@ -12,3 +12,5 @@ nanos
 prost
 subsec
 vertipads
+autopep
+pycodestyle
