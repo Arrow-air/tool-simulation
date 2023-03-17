@@ -362,6 +362,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "geo-types"
+version = "0.7.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e26879b63ac36ca5492918dc16f8c1e604b0f70f884fffbd3533f89953ab1991"
+dependencies = [
+ "num-traits",
+]
+
+[[package]]
 name = "getrandom"
 version = "0.2.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -612,6 +621,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "num-derive"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "876a53fff98e03a936a674b29568b0e605f06b29372c2489ff4de23f1949743d"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "num-integer"
 version = "0.1.45"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -645,6 +665,15 @@ name = "once_cell"
 version = "1.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "86f0b0d4bf799edbc74508c1e8bf170ff5f41238e5f8225603ca7caaae2b7860"
+
+[[package]]
+name = "ordered-float"
+version = "3.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d84eb1409416d254e4a9c8fa56cc24701755025b458f0fcd8e59e1f5f40c23bf"
+dependencies = [
+ "num-traits",
+]
 
 [[package]]
 name = "os_str_bytes"
@@ -953,7 +982,7 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 [[package]]
 name = "svc-cargo-client-rest"
 version = "0.1.0"
-source = "git+https://github.com/Arrow-air/svc-cargo#89a18274632c2f62b52d4ae31a93838921dae0ab"
+source = "git+https://github.com/Arrow-air/svc-cargo?tag=v0.2.0#9569485f0c44ab988f6bd356b9a8eea9ab11ecfb"
 dependencies = [
  "chrono",
  "serde",
@@ -963,9 +992,13 @@ dependencies = [
 
 [[package]]
 name = "svc-storage-client-grpc"
-version = "0.5.0-develop.1"
-source = "git+https://github.com/Arrow-air/svc-storage#d4030ea734d3249aeac0e0629b43ac85414611bc"
+version = "0.1.0"
+source = "git+https://github.com/Arrow-air/svc-storage?tag=v0.2.0#db614e0422df69b4e47c1fe35de5e76a56212fb0"
 dependencies = [
+ "geo-types",
+ "num-derive",
+ "num-traits",
+ "ordered-float",
  "prost",
  "prost-types",
  "tonic",
@@ -1246,9 +1279,9 @@ checksum = "c1e5fa573d8ac5f1a856f8d7be41d390ee973daf97c806b2c1a465e4e1406e68"
 
 [[package]]
 name = "utoipa"
-version = "2.3.0"
+version = "2.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "966ff3c715b2d558244ff20a719931fa3ea0abbcd9a227537b312f53d40a3d59"
+checksum = "b626abb3bbbe41ce00df6dea3d109a83a034930245c3307026d82d71e7a06e43"
 dependencies = [
  "indexmap",
  "serde",
@@ -1258,9 +1291,9 @@ dependencies = [
 
 [[package]]
 name = "utoipa-gen"
-version = "2.3.0"
+version = "2.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7bf1a8415c106ebe862b4f1429d597f0be7c81f681b1cebcbe249bfe533f5224"
+checksum = "250e8cdb0461b6fbaa1c1acb7f08300d773713fab721776becf5f7386b41a791"
 dependencies = [
  "proc-macro-error",
  "proc-macro2",
