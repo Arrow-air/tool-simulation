@@ -23,4 +23,3 @@ include .make/commitlint.mk
 include .make/toml.mk
 include .make/rust.mk
 include .make/python.mk
-include .make/locust.mk
